@@ -1,6 +1,5 @@
 import { parse } from "node-html-parser";
 import Emulator from "./emulator";
-import './page.module.css';
 
 interface Game {
   id: number;

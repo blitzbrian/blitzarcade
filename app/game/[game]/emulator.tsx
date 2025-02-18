@@ -17,7 +17,7 @@ export default function Emulator({ rom, name, platform } : { rom: string, name: 
 
 
     return (<>
-        <iframe style={{ margin: 0, height: '100%', width: '100%', border: 'none' }} src={`/emulator.html?rom=${rom}&core=${core}&name=${name}`}>
+        <iframe style={{ margin: 0, height: '100vh', width: '100vw', border: 'none', overflow: 'hidden' }} src={`/emulator.html?rom=${rom}&core=${core}&name=${name}`}>
 
         </iframe>
     </>)
