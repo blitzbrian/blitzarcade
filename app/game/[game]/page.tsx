@@ -1,17 +1,6 @@
-import {
-  AppShell,
-  AppShellHeader,
-  AppShellMain,
-  Card,
-  CardSection,
-  Image,
-  Text,
-  Button,
-  Flex,
-} from "@mantine/core";
-import NextImage from "next/image";
 import { parse } from "node-html-parser";
 import Emulator from "./emulator";
+import './page.module.css';
 
 interface Game {
   id: number;
@@ -71,17 +60,9 @@ export default async function Game({
 
   const rom = `${data.downloadUrl}?mediaId=${mediaId}&attach=${data.downloadName}`;
 
-  console.log(rom);
+  console.log(json.gamePlatform)
 
   return (
-    <AppShell header={{ height: 60 }} padding="md">
-      <AppShellHeader>
-        <div>Logo</div>
-      </AppShellHeader>
-
-      <AppShellMain>
-        <Emulator rom={rom} />
-      </AppShellMain>
-    </AppShell>
+    <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />
   );
 }

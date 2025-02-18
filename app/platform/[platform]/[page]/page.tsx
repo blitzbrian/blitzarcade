@@ -1,23 +1,14 @@
-import {
-  AppShell,
-  AppShellHeader,
-  AppShellMain,
-  Card,
-  CardSection,
-  Image,
-  Text,
-  Button,
-  Flex,
-} from "@mantine/core";
+import App from "@/app/app";
+import Paginizer from "@/app/pagination";
+import { Card, CardSection, Image, Text, Flex } from "@mantine/core";
 import NextImage from "next/image";
 import Link from "next/link";
 import { parse } from "node-html-parser";
 
 interface Game {
-  id: number;
-  image: string;
-  name: string;
-  path: string;
+    image: string;
+    name: string;
+    path: string;
 }
 
 // Store the cache for a day
@@ -26,75 +17,130 @@ export const revalidate = 86400;
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  let params = [];
-  const platforms = ["nintendo-ds", "gameboy-advance"];
+    const params = [];
+    const platforms = [
+        "nintendo-ds",
+        "gameboy-advance",
+        "playstation-portable",
+        "nintendo",
+        "nintendo-64",
+        "playstation",
+        "super-nintendo",
+        "gameboy",
+        "gameboy-color",
+        "sega-saturn",
+        "atari-2600",
+        "mame-037b11",
+        "sega-master-system",
+        "game-gear",
+        "commodore-64",
+        "sega-32x",
+        "atari-7800-prosystem",
+        "nintendo-famicom-disk-system",
+        "atari-5200-supersystem",
+        "nintendo-virtual-boy",
+        "atari-jaguar",
+        "atari-lynx",
+        "commodore-vic20",
+        "commodore-plus4-c16",
+        "amiga-500",
+        "commodore-pet",
+    ];
 
-  for (const platform of platforms) {
-    const res = await fetch(`https://www.romsgames.net/roms/${platform}/`);
-    const html = await res.text();
-    const pages =
-      html.split(
-        "flex items-center justify-center px-5 h-12 mx-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-950"
-      ).length - 1;
-    for (let i = 1; i <= pages; i++) {
-      params.push({ platform, page: i.toString() });
+    for (const platform of platforms) {
+        const res = await fetch(`https://www.romsgames.net/roms/${platform}/`);
+        const html = await res.text();
+        const pages =
+            html.split(
+                "flex items-center justify-center px-5 h-12 mx-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-950"
+            ).length - 1 || 1;
+        for (let i = 1; i <= pages; i++) {
+            params.push({ platform, page: i.toString() });
+        }
     }
-  }
-  return params;
+    return params;
 }
 
 export default async function Games({
-  params,
+    params,
 }: {
-  params: Promise<{ platform: string; page: string }>;
+    params: Promise<{ platform: string; page: string }>;
 }) {
-  const { platform, page } = await params;
-  const res = await fetch(
-    `https://www.romsgames.net/roms/${platform}/?page=${page}&sort=popularity`
-  );
-  const html = await res.text();
-  const root = parse(html);
-  const games: Game[] = root
-    .querySelectorAll("a.p-2.transform.transition-all.duration-300")
-    .map((element, i) => ({
-      id: i || 1,
-      image:
-        element.querySelector("img")?.getAttribute("src") ||
-        "https://cache.downloadroms.io/static/e240d3cbd93b644721ffa992c189a129fd75730f/image.jpeg",
-      name:
-        element.querySelector("div")?.innerText.trim() || "Yoshi's Island DS",
-      path: element.getAttribute("href") || "/404",
-    }));
+    const { platform, page } = await params;
+    const res = await fetch(
+        `https://www.romsgames.net/roms/${platform}/?page=${page}&sort=popularity`
+    );
+    const html = await res.text();
+    const pages =
+        html.split(
+            "flex items-center justify-center px-5 h-12 mx-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-950"
+        ).length - 1 || 1;
+    const root = parse(html);
 
-  return (
-    <AppShell header={{ height: 60 }} padding="md">
-      <AppShellHeader>
-        <div>Logo</div>
-      </AppShellHeader>
+    const games: Game[] = root
+        .querySelectorAll("a.p-2.transform.transition-all.duration-300")
+        .map((element) => ({
+            image:
+                element.querySelector("img")?.getAttribute("src") ||
+                "/image/no-cover.png",
+            name: parse(
+                element.querySelector("div")?.innerText.trim() || "Unknown game"
+            ).text,
+            path: element.getAttribute("href") || "#",
+        }));
 
-      <AppShellMain>
-        <Flex direction="row" wrap="wrap" justify="center" gap="xl">
-          {games.map((game) => (
-            <Card m="ms" w={400} key={game.id} shadow="sm" padding="lg" radius="md" withBorder>
-              <CardSection>
-                <Image
-                  component={NextImage}
-                  src={game.image}
-                  height={350}
-                  width={350}
-                  alt="Cover Art"
+    return (
+        <App>
+            <Flex justify="center" m="md">
+                <Paginizer
+                    pages={pages}
+                    page={parseInt(page)}
+                    platform={platform}
                 />
-              </CardSection>
+            </Flex>
+            <Flex direction="row" wrap="wrap" justify="center" gap="xl">
+                {games.map((game) => (
+                    <Link
+                        style={{ textDecoration: "none" }}
+                        prefetch={false}
+                        href={`/game${game.path}`}
+                        key={game.path}
+                    >
+                        <Card
+                            m="ms"
+                            w={400}
+                            shadow="sm"
+                            padding="lg"
+                            radius="md"
+                            withBorder
+                        >
+                            <CardSection mb="xs">
+                                <Image
+                                    component={NextImage}
+                                    src={game.image}
+                                    width={350}
+                                    height={0}
+                                    w="400"
+                                    h="auto"
+                                    alt="Cover Art"
+                                />
+                            </CardSection>
 
-              <Text fw={500} fz={20} ta="center" mt="xs" mb={0}>{game.name}</Text>
+                            <Text fw={500} fz={20} ta="center" mt="auto" mb={0}>
+                                {game.name}
+                            </Text>
+                        </Card>
+                    </Link>
+                ))}
+            </Flex>
 
-              <Button color="blue" fullWidth mt="auto" radius="md">
-                Play
-              </Button>
-            </Card>
-          ))}
-        </Flex>
-      </AppShellMain>
-    </AppShell>
-  );
+            <Flex justify="center" mt="md">
+                <Paginizer
+                    pages={pages}
+                    page={parseInt(page)}
+                    platform={platform}
+                />
+            </Flex>
+        </App>
+    );
 }

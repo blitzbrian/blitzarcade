@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="width:100%;height:100%;max-width:100%">
+            <div id="game"></div>
+        </div>
+        <script>
+            const query = new URLSearchParams(location.search)
+            const rom = query.get('rom');
+            const core = query.get('core');
+            const name = query.get('name');
+            
+            EJS_player = "#game";
+            EJS_core = core;
+            EJS_gameName = name;
+            EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+            EJS_startOnLoaded = true;
+            EJS_threads = true;
+            EJS_gameUrl = rom;
+            if(core == "famicom") {
+                EJS_core = "nes";
+                EJS_biosUrl = '/disksys.rom';            
+            }
+        </script>
+        <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+    </body>
+</html>
