@@ -12,9 +12,9 @@ interface Game {
 }
 
 // Store the cache for a day
-export const revalidate = 86400;
+export const dynamic = 'force-static';
+export const fetchCache = 'force-cache';
 
-export const dynamicParams = false;
 
 export async function generateStaticParams() {
     const params = [];
@@ -48,7 +48,9 @@ export async function generateStaticParams() {
     ];
 
     for (const platform of platforms) {
-        const res = await fetch(`https://www.romsgames.net/roms/${platform}/`);
+        const res = await fetch(`https://www.romsgames.net/roms/${platform}/`, {
+            cache: "force-cache"
+        });
         const html = await res.text();
         const pages =
             html.split(
@@ -68,7 +70,10 @@ export default async function Games({
 }) {
     const { platform, page } = await params;
     const res = await fetch(
-        `https://www.romsgames.net/roms/${platform}/?page=${page}&sort=popularity`
+        `https://www.romsgames.net/roms/${platform}/?page=${page}&sort=popularity`,
+        {
+            cache: "force-cache"
+        }
     );
     const html = await res.text();
     const pages =
@@ -80,13 +85,12 @@ export default async function Games({
     const games: Game[] = root
         .querySelectorAll("a.p-2.transform.transition-all.duration-300")
         .map((element) => {
-            let image = element.querySelector("img")?.getAttribute("src")
-            if(image?.startsWith("//")) image = image.replace("//", "https://")
+            let image = element.querySelector("img")?.getAttribute("src");
+            if (image?.startsWith("//"))
+                image = image.replace("//", "https://");
 
             return {
-                image:
-                    image ||
-                    "/image/no-cover.png",
+                image: image || "/image/no-cover.png",
                 name: parse(
                     element.querySelector("div")?.innerText.trim() ||
                         "Unknown game"

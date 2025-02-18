@@ -116,11 +116,6 @@ const platforms: Platform[] = [
     },
 ];
 
-// Store the cache for a day
-export const revalidate = 86400;
-
-export const dynamicParams = true;
-
 export default async function Home() {
     return (
         <App>

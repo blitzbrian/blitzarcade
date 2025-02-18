@@ -9,10 +9,10 @@ interface Game {
   rating: number;
 }
 
-// Store the cache for a day
-export const revalidate = 86400;
+// // Store the cache for a day
+// export const revalidate = 86400 * 7;
 
-export const dynamicParams = false;
+// export const dynamicParams = false;
 
 //   export async function generateStaticParams() {
 //     let params = [];
@@ -32,13 +32,20 @@ export const dynamicParams = false;
 //     return params;
 //   }
 
+export const dynamic = 'force-static';
+export const fetchCache = 'force-cache';
+
+
+
 export default async function Game({
   params,
 }: {
   params: Promise<{ game: string }>;
 }) {
   const { game } = await params;
-  let res = await fetch(`https://www.romsgames.net/${game}/`);
+  let res = await fetch(`https://www.romsgames.net/${game}/`, {
+    cache: "force-cache"
+  });
   const html = await res.text();
   const root = parse(html);
   const json = JSON.parse(
@@ -54,6 +61,7 @@ export default async function Game({
     },
     body: `mediaId=${mediaId}`,
     method: "POST",
+    cache: "force-cache"
   });
   const data = await res.json();
 
