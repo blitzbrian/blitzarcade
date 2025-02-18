@@ -4,7 +4,7 @@ const cores = {
     "Gameboy Color": "gb",
     "Nintendo": "nes",
     "Nintendo 64": "n64",
-    "Nintendo DS": "nds",
+    "Nintendo DS": "desmume",
     "Playstation Portable": "psp",
     "Playstation": "mednafen_psx_hw",
     "Nintendo Famicom Disk System": "famicom",
