@@ -59,7 +59,9 @@ export default async function Game({
 
   const rom = `${data.downloadUrl}?mediaId=${mediaId}&attach=${data.downloadName}`;
 
-  console.log(json.gamePlatform)
+  // console.log(json, data);
+
+  // console.log(json.gamePlatform)
 
   return (
     <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />

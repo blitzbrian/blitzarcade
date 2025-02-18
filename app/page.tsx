@@ -150,6 +150,7 @@ export default async function Home() {
                                         w="400"
                                         h="auto"
                                         alt="Console Art"
+                                        priority
                                     />
                                 </CardSection>
 

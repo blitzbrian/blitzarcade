@@ -79,15 +79,21 @@ export default async function Games({
 
     const games: Game[] = root
         .querySelectorAll("a.p-2.transform.transition-all.duration-300")
-        .map((element) => ({
-            image:
-                element.querySelector("img")?.getAttribute("src") ||
-                "/image/no-cover.png",
-            name: parse(
-                element.querySelector("div")?.innerText.trim() || "Unknown game"
-            ).text,
-            path: element.getAttribute("href") || "#",
-        }));
+        .map((element) => {
+            let image = element.querySelector("img")?.getAttribute("src")
+            if(image?.startsWith("//")) image = image.replace("//", "https://")
+
+            return {
+                image:
+                    image ||
+                    "/image/no-cover.png",
+                name: parse(
+                    element.querySelector("div")?.innerText.trim() ||
+                        "Unknown game"
+                ).text,
+                path: element.getAttribute("href") || "#",
+            };
+        });
 
     return (
         <App>
@@ -123,6 +129,7 @@ export default async function Games({
                                     w="400"
                                     h="auto"
                                     alt="Cover Art"
+                                    priority
                                 />
                             </CardSection>
 
