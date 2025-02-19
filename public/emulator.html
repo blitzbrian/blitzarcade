@@ -17,6 +17,15 @@
             const core = query.get('core');
             const name = query.get('name');
             
+
+            // EJS doesn't have a nice way to do this without modifying their code
+            console.log2 = console.log;
+            console.log = (msg) => {
+                if(msg === "Network Error") {
+                    window.parent.postMessage('revalidate', location.origin);
+                } else console.log2(msg);
+            }
+
             EJS_player = "#game";
             EJS_core = core;
             EJS_gameName = name;
@@ -24,7 +33,7 @@
             EJS_startOnLoaded = true;
             EJS_threads = true;
             EJS_gameUrl = rom;
-            // EJS_biosUrl = "/bios_MD.bin"
+            // EJS_biosUrl = "/scph5501.bin"
             if(core == "famicom") {
                 EJS_core = "nes";
                 EJS_biosUrl = '/disksys.rom';            

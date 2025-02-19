@@ -1,5 +1,5 @@
 import App from "@/app/app";
-import Paginizer from "@/app/pagination";
+import Paginizer from "./pagination";
 import { Card, CardSection, Image, Text, Flex } from "@mantine/core";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -119,6 +119,7 @@ export default async function Games({
                         <Card
                             m="ms"
                             w={400}
+                            h="100%"
                             shadow="sm"
                             padding="lg"
                             radius="md"
@@ -130,14 +131,14 @@ export default async function Games({
                                     src={game.image}
                                     width={350}
                                     height={0}
-                                    w="400"
+                                    w="100%"
                                     h="auto"
                                     alt="Cover Art"
                                     priority
                                 />
                             </CardSection>
 
-                            <Text fw={500} fz={20} ta="center" mt="auto" mb={0}>
+                            <Text fw={500} fz={20} ta="center">
                                 {game.name}
                             </Text>
                         </Card>

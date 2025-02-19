@@ -2,11 +2,11 @@ import { parse } from "node-html-parser";
 import Emulator from "./emulator";
 
 interface Game {
-  id: number;
-  image: string;
-  name: string;
-  rom: string;
-  rating: number;
+    id: number;
+    image: string;
+    name: string;
+    rom: string;
+    rating: number;
 }
 
 // // Store the cache for a day
@@ -32,46 +32,42 @@ interface Game {
 //     return params;
 //   }
 
-export const dynamic = 'force-static';
-export const fetchCache = 'force-cache';
-
-
+export const dynamic = "force-static";
+export const fetchCache = "force-cache";
 
 export default async function Game({
-  params,
+    params,
 }: {
-  params: Promise<{ game: string }>;
+    params: Promise<{ game: string }>;
 }) {
-  const { game } = await params;
-  let res = await fetch(`https://www.romsgames.net/${game}/`, {
-    cache: "force-cache"
-  });
-  const html = await res.text();
-  const root = parse(html);
-  const json = JSON.parse(
-    root.querySelector('[type="application/ld+json"]')?.innerText || "{}"
-  );
-  const mediaId = root
-    .querySelector("[data-media-id]")
-    ?.getAttribute("data-media-id");
-  res = await fetch(`https://www.romsgames.net/${game}/?download`, {
-    headers: {
-      accept: "application/json",
-      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-    },
-    body: `mediaId=${mediaId}`,
-    method: "POST",
-    cache: "force-cache"
-  });
-  const data = await res.json();
+    const { game } = await params;
+    let res = await fetch(`https://www.romsgames.net/${game}/`, {
+        cache: "force-cache",
+    });
+    const html = await res.text();
+    const root = parse(html);
+    const json = JSON.parse(
+        root.querySelector('[type="application/ld+json"]')?.innerText || "{}"
+    );
+    const mediaId = root
+        .querySelector("[data-media-id]")
+        ?.getAttribute("data-media-id");
+    res = await fetch(`https://www.romsgames.net/${game}/?download`, {
+        headers: {
+            accept: "application/json",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body: `mediaId=${mediaId}`,
+        method: "POST",
+        cache: "force-cache",
+    });
+    const data = await res.json();
 
-  const rom = `${data.downloadUrl}?mediaId=${mediaId}&attach=${data.downloadName}`;
+    const rom = `${data.downloadUrl}?mediaId=${mediaId}&attach=${data.downloadName}`;
 
-  // console.log(json, data);
+    // console.log(json, data);
 
-  // console.log(json.gamePlatform)
+    // console.log(json.gamePlatform)
 
-  return (
-    <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />
-  );
+    return <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />;
 }

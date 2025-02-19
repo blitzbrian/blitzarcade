@@ -87,10 +87,6 @@ const platforms: Platform[] = [
         path: "atari-5200-supersystem",
     },
     {
-        name: "Virtual Boy",
-        path: "nintendo-virtual-boy",
-    },
-    {
         name: "Atari Jaguar",
         path: "atari-jaguar",
     },
@@ -114,11 +110,19 @@ const platforms: Platform[] = [
         name: "Commodore PET",
         path: "commodore-pet",
     },
+    {
+        name: "Virtual Boy",
+        path: "nintendo-virtual-boy",
+    },
 ];
 
 export default async function Home() {
     return (
         <App>
+            <Flex gap="md" justify="center" align="center" mb="xl">
+                <NextImage alt="logo" height={679 / 4 } width={759 / 4} src="/image/logo.png"></NextImage>
+                <Text fw={500} fz={50}>blitzarcade</Text>
+            </Flex>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
                 {platforms.map((platform) => (
                     <>
@@ -131,19 +135,21 @@ export default async function Home() {
                             <Card
                                 m="ms"
                                 w={400}
+                                h="100%"
                                 shadow="sm"
                                 padding="lg"
                                 radius="md"
                                 withBorder
                             >
-                                <CardSection mb="xs">
+                                <CardSection mb="xs" mt="auto">
                                     <Image
                                         component={NextImage}
                                         src={`/image/${platform.path}.png`}
                                         width={350}
                                         height={0}
-                                        w="400"
                                         h="auto"
+                                        w="100%"
+
                                         alt="Console Art"
                                         priority
                                     />
