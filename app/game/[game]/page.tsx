@@ -1,5 +1,7 @@
 import { parse } from "node-html-parser";
 import Emulator from "./emulator";
+import App from "@/app/app";
+import { platforms } from "@/app/consoles";
 
 interface Game {
     id: number;
@@ -65,9 +67,22 @@ export default async function Game({
 
     const rom = `${data.downloadUrl}?mediaId=${mediaId}&attach=${data.downloadName}`;
 
-    // console.log(json, data);
+    const platform = platforms.find(
+        (platform) => platform.system === json.gamePlatform
+    );
 
-    // console.log(json.gamePlatform)
-
-    return <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />;
+    return (
+        <App
+            breadcrumbs={[
+                { name: "Home", href: "/" },
+                {
+                    name: platform?.name || "Unknown Console",
+                    href: `/platform/${platform?.path || "nintendo-ds"}/1`,
+                },
+                { name: json.name, href: `/game/${game}` },
+            ]}
+        >
+            <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />
+        </App>
+    );
 }

@@ -1,9 +1,10 @@
 import App from "@/app/app";
-import Paginizer from "./pagination";
-import { Card, CardSection, Image, Text, Flex } from "@mantine/core";
+import Paginizer from "../../../pagination";
+import { Card, CardSection, Image, Text, Flex, Title } from "@mantine/core";
 import NextImage from "next/image";
 import Link from "next/link";
 import { parse } from "node-html-parser";
+import { platforms } from "@/app/consoles";
 
 interface Game {
     image: string;
@@ -11,44 +12,15 @@ interface Game {
     path: string;
 }
 
-// Store the cache for a day
 export const dynamic = 'force-static';
 export const fetchCache = 'force-cache';
 
 
 export async function generateStaticParams() {
     const params = [];
-    const platforms = [
-        "nintendo-ds",
-        "gameboy-advance",
-        "playstation-portable",
-        "nintendo",
-        "nintendo-64",
-        "playstation",
-        "super-nintendo",
-        "gameboy",
-        "gameboy-color",
-        "sega-saturn",
-        "atari-2600",
-        "mame-037b11",
-        "sega-master-system",
-        "game-gear",
-        "commodore-64",
-        "sega-32x",
-        "atari-7800-prosystem",
-        "nintendo-famicom-disk-system",
-        "atari-5200-supersystem",
-        "nintendo-virtual-boy",
-        "atari-jaguar",
-        "atari-lynx",
-        "commodore-vic20",
-        "commodore-plus4-c16",
-        "amiga-500",
-        "commodore-pet",
-    ];
 
     for (const platform of platforms) {
-        const res = await fetch(`https://www.romsgames.net/roms/${platform}/`, {
+        const res = await fetch(`https://www.romsgames.net/roms/${platform.path}/`, {
             cache: "force-cache"
         });
         const html = await res.text();
@@ -57,7 +29,7 @@ export async function generateStaticParams() {
                 "flex items-center justify-center px-5 h-12 mx-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-950"
             ).length - 1 || 1;
         for (let i = 1; i <= pages; i++) {
-            params.push({ platform, page: i.toString() });
+            params.push({ platform: platform.path, page: i.toString() });
         }
     }
     return params;
@@ -82,6 +54,8 @@ export default async function Games({
         ).length - 1 || 1;
     const root = parse(html);
 
+    const platformName = platforms.find(path => path.path === platform)?.name || "Unknown Console"
+
     const games: Game[] = root
         .querySelectorAll("a.p-2.transform.transition-all.duration-300")
         .map((element) => {
@@ -100,8 +74,12 @@ export default async function Games({
         });
 
     return (
-        <App>
-            <Flex justify="center" m="md">
+        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: platformName, href: `/platform/${platform}/${page}` }]}>
+
+            <Flex align="center" mb="md" gap="xl" direction="column">
+                <Title>
+                    {platformName}
+                </Title>
                 <Paginizer
                     pages={pages}
                     page={parseInt(page)}
@@ -135,6 +113,7 @@ export default async function Games({
                                     h="auto"
                                     alt="Cover Art"
                                     priority
+                                    fallbackSrc="/image/no-cover.png"
                                 />
                             </CardSection>
 

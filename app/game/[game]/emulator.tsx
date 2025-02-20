@@ -3,35 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import revalidate from "./revalidate";
-
-const cores = {
-    "Gameboy Advance": "gba",
-    Gameboy: "gb",
-    "Gameboy Color": "gb",
-    Nintendo: "nes",
-    "Nintendo 64": "n64",
-    "Nintendo DS": "desmume",
-    "Playstation Portable": "psp",
-    Playstation: "mednafen_psx_hw",
-    "Nintendo Famicom Disk System": "famicom",
-    "Nintendo Virtual Boy": "vb",
-    "Super Nintendo": "snes",
-    "Sega Saturn": "segaSaturn",
-    "Atari 2600": "atari2600",
-    "MAME 037b11": "mame2003",
-    "Sega Master System": "segaMS",
-    "Game Gear": "segaGG",
-    "Commodore 64": "c64",
-    "Sega 32X": "sega32x",
-    "Atari 7800 ProSystem": "atari7800",
-    "Atari 5200 SuperSystem": "atari5200",
-    "Atari Jaguar": "jaguar",
-    "Atari Lynx": "lynx",
-    "Commodore VIC20": "vic20",
-    "Commodore Plus4 C16": "plus4",
-    "Amiga 500": "amiga",
-    "Commodore Pet": "pet",
-};
+import { platforms } from "@/app/consoles";
 
 export default function Emulator({
     rom,
@@ -42,7 +14,7 @@ export default function Emulator({
     name: string;
     platform: string;
 }) {
-    const core = cores[platform as keyof typeof cores];
+    const core = platforms.find(p => p.system === platform)?.core
     const router = useRouter();
 
     useEffect(() => {
@@ -61,12 +33,11 @@ export default function Emulator({
         <iframe
             style={{
                 position: "absolute",
-                top: 0,
-                bottom: 0,
-                height: "100vh",
-                width: "100vw",
+                left: 0,
+                top: "60px",
+                height: "calc(100vh - 60px)",
+                width: "100%",
                 border: "none",
-                overflow: "hidden",
             }}
             src={`/emulator.html?rom=${rom}&core=${core}&name=${name}`}
         />
