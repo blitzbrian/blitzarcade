@@ -9,7 +9,7 @@ export const platforms: Platform[] = [
     {
         name: "Nintendo DS",
         path: "nintendo-ds",
-        core: "desmuse",
+        core: "desmume",
         system: "Nintendo DS"
     },
     {
