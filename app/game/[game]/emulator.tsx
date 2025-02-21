@@ -17,6 +17,8 @@ export default function Emulator({
     const core = platforms.find(p => p.system === platform)?.core
     const router = useRouter();
 
+    console.log(core)
+
     useEffect(() => {
         window.addEventListener("message", async (e) => {
             if (e.origin !== location.origin) return;
