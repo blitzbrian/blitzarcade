@@ -19,7 +19,7 @@ export default function App({ children, breadcrumbs }: { children: React.ReactNo
                             <Text ml="xs" fw={500} fz={15}>blitzarcade</Text>
                         </Flex>
                     </Link>
-                    <Breadcrumbs ml="auto">
+                    <Breadcrumbs ml="auto" visibleFrom="xs">
                         {breadcrumbs.map((breadcrumb) => (
                             <Anchor key={breadcrumb.name} href={breadcrumb.href} component={Link} prefetch={false} c="white">{breadcrumb.name}</Anchor>
                         ))}

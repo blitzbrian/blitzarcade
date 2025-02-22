@@ -53,14 +53,14 @@ export default async function Search({
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
                 {games.map((game) => (
                     <Link
-                        style={{ textDecoration: "none" }}
+                        style={{ textDecoration: "none", width: "400px", maxWidth: "400px" }}
                         prefetch={false}
                         href={`/game${game.path}`}
                         key={game.path}
                     >
                         <Card
                             m="ms"
-                            w={400}
+                            w="100%"
                             h="100%"
                             shadow="sm"
                             padding="lg"

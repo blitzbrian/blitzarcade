@@ -8,29 +8,29 @@ import { platforms } from "./consoles";
 export default async function Home() {
     return (
         <App breadcrumbs={[{ name: "Home", href: "/" }]}>
-            <Flex gap="md" justify="center" align="center" mb="xl">
+            <Flex gap="md" justify="center" align="center" mb="xl" maw="100%">
                 <NextImage alt="logo" height={679 / 4 } width={759 / 4} src="/image/logo.png"></NextImage>
-                <Text fw={500} fz={50}>blitzarcade</Text>
+                <Text fw={500} fz="min(8vw, 50px)">blitzarcade</Text>
             </Flex>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
                 {platforms.map((platform) => (
                     <>
                         <Link
-                            style={{ textDecoration: "none" }}
+                            style={{ textDecoration: "none", width: "400px", maxWidth: "400px" }}
                             key={platform.path}
                             prefetch={false}
                             href={`/platform/${platform.path}/1`}
                         >
                             <Card
                                 m="ms"
-                                w={400}
+                                w="100%"
                                 h="100%"
                                 shadow="sm"
                                 padding="lg"
                                 radius="md"
                                 withBorder
                             >
-                                <CardSection mb="xs" mt="auto">
+                                <CardSection mb="xs" mt="auto" px="md">
                                     <Image
                                         component={NextImage}
                                         src={`/image/${platform.path}.png`}
