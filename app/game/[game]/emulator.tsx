@@ -40,7 +40,7 @@ export default function Emulator({
                 border: "none",
             }}
             id="emulator"
-            src={`/emulator.html?rom=${rom}&core=${p?.core}&name=${encodeURI(name)}`}
+            src={`/emulator.html?rom=${encodeURIComponent(rom)}&core=${p?.core}&name=${encodeURIComponent(name)}&netplay=null`}
         />
     );
 }

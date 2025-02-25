@@ -15,10 +15,11 @@
         <script>
             (async () => {
                 const query = new URLSearchParams(location.search);
-                const rom = query.get("rom");
+                const rom = decodeURIComponent(query.get("rom"));
                 const core = query.get("core");
-                const name = decodeURI(query.get("name"));
-                const netplay = query.get("netplay") === "1";
+                const name = decodeURIComponent(query.get("name"));
+                const netplayUrl = query.get("netplay");
+                const netplay = netplayUrl !== "null";
 
                 function generateHashId(gameName) {
                     const hash = [...gameName].reduce(
@@ -57,15 +58,22 @@
                 EJS_startOnLoaded = true;
                 EJS_threads = true;
                 EJS_gameUrl = rom;
-                EJS_oldCores = true;
+                if (netplay) EJS_oldCores = true;
                 EJS_gameID = generateHashId(name);
                 EJS_backgroundColor = "#242424";
-                EJS_netplayUrl = "https://emulatorjs-netplay-old.onrender.com";
+                EJS_netplayUrl = netplayUrl;
+                EJS_DEBUG_XX = true;
                 // EJS_onGameStart = () => {
                 //     EJS_emulator.netplayEnabled = true;
                 //     EJS_emulator.openNetplayMenu();
                 // }
                 // EJS_biosUrl = "/scph5501.bin"
+
+                EJS_defaultOptions = {
+                    'desmume_num_cores': '4',        
+                    'mupen64plus-ThreadedRenderer': 'True'
+                }
+
                 if (core == "famicom") {
                     EJS_core = "nes";
                     EJS_biosUrl = "/disksys.rom";
