@@ -14,10 +14,8 @@ export default function Emulator({
     name: string;
     platform: string;
 }) {
-    const core = platforms.find(p => p.system === platform)?.core
+    const p = platforms.find(p => p.system === platform);
     const router = useRouter();
-
-    console.log(core)
 
     useEffect(() => {
         window.addEventListener("message", async (e) => {
@@ -41,7 +39,9 @@ export default function Emulator({
                 width: "100%",
                 border: "none",
             }}
-            src={`/emulator.html?rom=${rom}&core=${core}&name=${name}`}
+            id="emulator"
+            src={`/emulator.html?rom=${rom}&core=${p?.core}&name=${encodeURI(name)}`}
         />
     );
 }
+

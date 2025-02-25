@@ -1,45 +1,98 @@
 <html>
     <head>
         <style>
-            body, html {
+            body,
+            html {
                 margin: 0;
                 padding: 0;
             }
         </style>
     </head>
     <body>
-        <div style="width:100%;height:100%;max-width:100%">
+        <div style="width: 100%; height: 100%; max-width: 100%; background-color: #242424;">
             <div id="game"></div>
         </div>
         <script>
-            const query = new URLSearchParams(location.search)
-            const rom = query.get('rom');
-            const core = query.get('core');
-            const name = query.get('name');
-            
+            (async () => {
+                const query = new URLSearchParams(location.search);
+                const rom = query.get("rom");
+                const core = query.get("core");
+                const name = decodeURI(query.get("name"));
+                const netplay = query.get("netplay") === "1";
 
-            // EJS doesn't have a nice way to do this without modifying their code
-            console.log2 = console.log;
-            console.log = (msg) => {
-                if(msg === "Network Error") {
+                function generateHashId(gameName) {
+                    const hash = [...gameName].reduce(
+                        (acc, char) => acc + char.charCodeAt(0),
+                        0
+                    );
+                    return hash;
+                }
+
+                EJS_player = "#game";
+                EJS_core = core;
+                EJS_gameName = name;
+
+                EJS_Buttons = {
+                    playPause: true,
+                    restart: true,
+                    mute: true,
+                    settings: true,
+                    fullscreen: true,
+                    saveState: true,
+                    loadState: true,
+                    screenRecord: true,
+                    gamepad: true,
+                    cheat: true,
+                    volume: true,
+                    saveSavFiles: true,
+                    loadSavFiles: true,
+                    quickSave: true,
+                    quickLoad: true,
+                    screenshot: true,
+                    cacheManager: true,
+                    exitEmulation: false,
+                };
+
+                EJS_pathtodata = netplay ? "https://cdn.emulatorjs.org/3.1.5/data/" : "https://cdn.emulatorjs.org/latest/data/";
+                EJS_startOnLoaded = true;
+                EJS_threads = true;
+                EJS_gameUrl = rom;
+                EJS_oldCores = true;
+                EJS_gameID = generateHashId(name);
+                EJS_backgroundColor = "#242424";
+                EJS_netplayUrl = "https://emulatorjs-netplay-old.onrender.com";
+                // EJS_onGameStart = () => {
+                //     EJS_emulator.netplayEnabled = true;
+                //     EJS_emulator.openNetplayMenu();
+                // }
+                // EJS_biosUrl = "/scph5501.bin"
+                if (core == "famicom") {
+                    EJS_core = "nes";
+                    EJS_biosUrl = "/disksys.rom";
+                }
+
+                try {
+                    const res = await fetch(rom, {
+                        method: "HEAD"
+                    });
+
+                    if(res.status !== 200) {
+                        window.parent.postMessage('revalidate', location.origin);
+                        return;
+                    }
+
+                } catch (err) {
                     window.parent.postMessage('revalidate', location.origin);
-                } else console.log2(msg);
-            }
+                    return;   
+                }
 
-            EJS_player = "#game";
-            EJS_core = core;
-            EJS_gameName = name;
-            EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
-            EJS_startOnLoaded = true;
-            EJS_threads = true;
-            EJS_gameUrl = rom;
-            EJS_backgroundColor = '#242424'
-            // EJS_biosUrl = "/scph5501.bin"
-            if(core == "famicom") {
-                EJS_core = "nes";
-                EJS_biosUrl = '/disksys.rom';            
-            }
+                const script = document.createElement('script');
+                script.src = netplay ? "https://cdn.emulatorjs.org/3.1.5/data/loader.js" : "https://cdn.emulatorjs.org/latest/data/loader.js";
+                document.head.appendChild(script);
+
+            })();
         </script>
-        <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+        <!-- <script src="https://cdn.emulatorjs.org/latest/data/loader.js"></script> -->
+        <!-- <script src="https://cdn.emulatorjs.org/3.1.5/data/loader.js"></script> -->
     </body>
 </html>

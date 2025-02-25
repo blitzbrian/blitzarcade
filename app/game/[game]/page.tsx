@@ -73,6 +73,7 @@ export default async function Game({
 
     return (
         <App
+            netplay={platform?.netplay}
             breadcrumbs={[
                 { name: "Home", href: "/" },
                 {

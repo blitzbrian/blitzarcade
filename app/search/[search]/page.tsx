@@ -11,7 +11,6 @@ import Link from "next/link";
 import { parse } from "node-html-parser";
 
 interface Game {
-    id: number;
     image: string;
     name: string;
     path: string;
@@ -36,20 +35,23 @@ export default async function Search({
 
     const games: Game[] = root
         .querySelectorAll("a.p-2.transform.transition-all.duration-300")
-        .map((element, i) => ({
-            id: i || 1,
-            image:
-                element.querySelector("img")?.getAttribute("src") ||
-                "/image/no-cover.png",
-                name:
-                element.querySelector("div")?.innerText.trim() ||
-                "Unknown game",
-            path: element.getAttribute("href") || "#",
-        }));
+        .map((element) => {
+            let image = element.querySelector("img")?.getAttribute("src");
+            if (image?.startsWith("//"))
+                image = image.replace("//", "https://");
 
+            return {
+                image: image || "/image/no-cover.png",
+                name: parse(
+                    element.querySelector("div")?.innerText.trim() ||
+                        "Unknown game"
+                ).text,
+                path: element.getAttribute("href") || "#",
+            };
+        });
 
         return (
-        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: search, href: `/search/${search}` }]}>
+        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: decodeURI(search), href: `/search/${search}` }]}>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
                 {games.map((game) => (
                     <Link

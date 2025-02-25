@@ -3,6 +3,7 @@ interface Platform {
     path: string;
     core: string;
     system: string;
+    netplay?: number;
 }
 
 export const platforms: Platform[] = [
@@ -10,7 +11,7 @@ export const platforms: Platform[] = [
         name: "Nintendo DS",
         path: "nintendo-ds",
         core: "desmume",
-        system: "Nintendo DS"
+        system: "Nintendo DS",
     },
     {
         name: "Gameboy Advance",
@@ -28,13 +29,15 @@ export const platforms: Platform[] = [
         name: "Nintendo",
         path: "nintendo",
         core: "nes",
-        system: "Nintendo"
+        system: "Nintendo",
+        netplay: 1
     },
     {
         name: "Nintendo 64",
         path: "nintendo-64",
         core: "n64",
-        system: "Nintendo 64"
+        system: "Nintendo 64",
+        netplay: 1
     },
     {
         name: "Playstation",
@@ -46,7 +49,8 @@ export const platforms: Platform[] = [
         name: "Super Nintendo",
         path: "super-nintendo",
         core: "snes",
-        system: "Super Nintendo"
+        system: "Super Nintendo",
+        netplay: 1
     },
     {
         name: "Gameboy",
@@ -70,7 +74,8 @@ export const platforms: Platform[] = [
         name: "Atari 2600",
         path: "atari-2600",
         core: "atari2600",
-        system: "Atari 2600"
+        system: "Atari 2600",
+        netplay: 1
     },
     {
         name: "Mame",
@@ -82,7 +87,8 @@ export const platforms: Platform[] = [
         name: "Sega Master System",
         path: "sega-master-system",
         core: "segaMS",
-        system: "Sega Master System"
+        system: "Sega Master System",
+        netplay: 1
     },
     {
         name: "Game Gear",
@@ -100,7 +106,8 @@ export const platforms: Platform[] = [
         name: "Sega 32x",
         path: "sega-32x",
         core: "sega32x",
-        system: "Sega 32X"
+        system: "Sega 32X",
+        netplay: 1
     },
     {
         name: "Atari 7800",
