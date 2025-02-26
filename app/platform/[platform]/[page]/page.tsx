@@ -12,34 +12,46 @@ interface Game {
     path: string;
 }
 
-export const dynamic = 'force-static';
-export const fetchCache = 'force-cache';
+export const dynamic = "force-static";
+export const fetchCache = "force-cache";
 
 type Props = {
-    params: Promise<{ platform: string, page: string }>
-}
+    params: Promise<{ platform: string; page: string }>;
+};
 
-export async function generateMetadata( { params }: Props) {
+export async function generateMetadata({ params }: Props) {
     const { platform, page } = await params;
 
-    const platformName = platforms.find(path => path.path === platform)?.name || "Unknown Console"
+    const p = platforms.find((path) => path.path === platform);
+    const name = p?.name;
 
     return {
-        title: `blitzarcade: ${platformName}`,
+        description: `${name}`,
         openGraph: {
-            title: `blitzarcade: ${platformName}`,
-            url: `https://blitzarcade.org/platform/${platform}/${page}`
-        }
-    }
+            title: 'blitzarcade',
+            description: `${name}`,
+            url: `https://blitzarcade.org/platform/${platform}/${page}`,
+            images: [
+                {
+                    url: `https://blitzarcade.org/image/${p?.path}.png`,
+                },
+            ],
+            type: "website",
+            locale: "en_US"
+        },
+    };
 }
 
 export async function generateStaticParams() {
     const params = [];
 
     for (const platform of platforms) {
-        const res = await fetch(`https://www.romsgames.net/roms/${platform.path}/`, {
-            cache: "force-cache"
-        });
+        const res = await fetch(
+            `https://www.romsgames.net/roms/${platform.path}/`,
+            {
+                cache: "force-cache",
+            }
+        );
         const html = await res.text();
         const pages =
             html.split(
@@ -61,7 +73,7 @@ export default async function Games({
     const res = await fetch(
         `https://www.romsgames.net/roms/${platform}/?page=${page}&sort=popularity`,
         {
-            cache: "force-cache"
+            cache: "force-cache",
         }
     );
     const html = await res.text();
@@ -71,7 +83,9 @@ export default async function Games({
         ).length - 1 || 1;
     const root = parse(html);
 
-    const platformName = platforms.find(path => path.path === platform)?.name || "Unknown Console"
+    const platformName =
+        platforms.find((path) => path.path === platform)?.name ||
+        "Unknown Console";
 
     const games: Game[] = root
         .querySelectorAll("a.p-2.transform.transition-all.duration-300")
@@ -91,12 +105,14 @@ export default async function Games({
         });
 
     return (
-        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: platformName, href: `/platform/${platform}/${page}` }]}>
-
+        <App
+            breadcrumbs={[
+                { name: "Home", href: "/" },
+                { name: platformName, href: '#' },
+            ]}
+        >
             <Flex align="center" mb="md" gap="xl" direction="column">
-                <Title>
-                    {platformName}
-                </Title>
+                <Title>{platformName}</Title>
                 <Paginizer
                     pages={pages}
                     page={parseInt(page)}
@@ -104,9 +120,13 @@ export default async function Games({
                 />
             </Flex>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
-                {games.map((game) => (
+                {games.map((game, i) => (
                     <Link
-                        style={{ textDecoration: "none", maxWidth: "400px", width: "400px" }}
+                        style={{
+                            textDecoration: "none",
+                            maxWidth: "400px",
+                            width: "400px",
+                        }}
                         prefetch={false}
                         href={`/game${game.path}`}
                         key={game.path}
@@ -129,7 +149,7 @@ export default async function Games({
                                     w="100%"
                                     h="auto"
                                     alt="Cover Art"
-                                    priority
+                                    priority={i <= 6}
                                     fallbackSrc="/image/no-cover.png"
                                 />
                             </CardSection>

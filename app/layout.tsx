@@ -10,10 +10,8 @@ export const metadata: Metadata = {
   title: 'blitzarcade',
   description: 'blitzarcade is an online platform that lets you play classic games from consoles like PSP, DS, NES, and more, offering a nostalgic gaming experience directly in your browser.',
   applicationName: 'blitzarcade',
-  authors: [{ name: 'blitzbrian', url: 'https://blitzbrian.is-a.dev' }],
-  creator: 'blitzbrian',
-  publisher: 'blitzbrian',
   category: 'games',
+  keywords: ["blitzarcade", "games", "console", "free", "nintendo", "playstation", "sega", "online"],
   openGraph: {
     title: 'blitzarcade',
     description: 'blitzarcade is an online platform that lets you play classic games from consoles like PSP, DS, NES, and more, offering a nostalgic gaming experience directly in your browser.',
@@ -22,7 +20,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: 'https://blitzarcade.org/image/image.png',
+        url: 'https://blitzarcade.org/image/logo.png',
         width: 759,
         height: 697,
         alt: 'Logo'

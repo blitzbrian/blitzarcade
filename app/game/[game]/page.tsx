@@ -15,10 +15,10 @@ export const dynamic = "force-static";
 export const fetchCache = "force-cache";
 
 type Props = {
-    params: Promise<{ game: string }>
-}
+    params: Promise<{ game: string }>;
+};
 
-export async function generateMetadata( { params }: Props) {
+export async function generateMetadata({ params }: Props) {
     const { game } = await params;
 
     const res = await fetch(`https://www.romsgames.net/${game}/`, {
@@ -31,12 +31,16 @@ export async function generateMetadata( { params }: Props) {
     );
 
     return {
-        title: `blitzarcade: ${json.name}`,
+        description: `${json.name}`,
         openGraph: {
-            title: `blitzarcade: ${json.name}`,
-            url: `https://blitzarcade.org/game/${game}`
-        }
-    }
+            title: 'blitzarcade',
+            description: `${json.name}`,
+            url: `https://blitzarcade.org/game/${game}`,
+            images: [{ url: json.image }],
+            type: "website",
+            locale: "en_US"
+        },
+    };
 }
 
 export default async function Game({
@@ -82,7 +86,7 @@ export default async function Game({
                     name: platform?.name || "Unknown Console",
                     href: `/platform/${platform?.path || "nintendo-ds"}/1`,
                 },
-                { name: json.name, href: `/game/${game}` },
+                { name: json.name, href: '#' },
             ]}
         >
             <Emulator name={json.name} rom={rom} platform={json.gamePlatform} />

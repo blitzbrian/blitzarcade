@@ -24,10 +24,21 @@ export async function generateMetadata( { params }: Props) {
     const { search } = await params;
 
     return {
-        title: `blitzarcade: ${decodeURI(search)}`,
+        description: `Search for ${decodeURI(search)}`,
         openGraph: {
-            title: `blitzarcade: ${decodeURI(search)}`,
-            url: `https://blitzarcade.org/search/${search}`
+            title: 'blitzarcade',
+            description: `Search for: ${decodeURI(search)}`,
+            url: `https://blitzarcade.org/search/${search}`,
+            type: "website",
+            locale: "en_US",
+            images: [
+                {
+                  url: 'https://blitzarcade.org/image/logo.png',
+                  width: 759,
+                  height: 697,
+                  alt: 'Logo'
+                }
+            ]
         }
     }
 }
@@ -67,9 +78,9 @@ export default async function Search({
         });
 
         return (
-        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: decodeURI(search), href: `/search/${search}` }]}>
+        <App breadcrumbs={[{ name: "Home", href: "/" }, { name: "Search", href: "#" }, { name: decodeURI(search), href: `#` }]}>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
-                {games.map((game) => (
+                {games.map((game, i) => (
                     <Link
                         style={{ textDecoration: "none", width: "400px", maxWidth: "400px" }}
                         prefetch={false}
@@ -94,7 +105,7 @@ export default async function Search({
                                     w="100%"
                                     h="auto"
                                     alt="Cover Art"
-                                    priority
+                                    priority={i <= 6}
                                     fallbackSrc="/image/no-cover.png"
                                 />
                             </CardSection>

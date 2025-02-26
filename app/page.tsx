@@ -7,13 +7,13 @@ import { platforms } from "./consoles";
 
 export default async function Home() {
     return (
-        <App breadcrumbs={[{ name: "Home", href: "/" }]}>
+        <App breadcrumbs={[{ name: "Home", href: "#" }]}>
             <Flex gap="md" justify="center" align="center" mb="xl" maw="100%">
-                <NextImage alt="logo" height={679 / 4 } width={759 / 4} src="/image/logo.png"></NextImage>
+                <NextImage priority alt="logo" height={679 / 4 } width={759 / 4} src="/image/logo.png"></NextImage>
                 <Text fw={500} fz="min(8vw, 50px)">blitzarcade</Text>
             </Flex>
             <Flex direction="row" wrap="wrap" justify="center" gap="xl">
-                {platforms.map((platform) => (
+                {platforms.map((platform, i) => (
                     <>
                         <Link
                             style={{ textDecoration: "none", width: "400px", maxWidth: "400px" }}
@@ -39,7 +39,7 @@ export default async function Home() {
                                         h="auto"
                                         w="100%"
                                         alt="Console Art"
-                                        priority
+                                        priority={i <= 6}
                                         fallbackSrc="/image/no-cover.png"
                                     />
                                 </CardSection>
