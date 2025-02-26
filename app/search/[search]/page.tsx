@@ -6,7 +6,6 @@ import {
     Text,
     Flex,
 } from "@mantine/core";
-import type { Metadata } from "next";
 import NextImage from "next/image";
 import Link from "next/link";
 import { parse } from "node-html-parser";
@@ -30,13 +29,6 @@ export async function generateMetadata( { params }: Props) {
             title: `blitzarcade: ${decodeURI(search)}`,
             url: `https://blitzarcade.org/search/${search}`
         }
-    }
-}
-
-export const metadata: Metadata = {
-    title: 'blitzarcade: search',
-    openGraph: {
-        title: 'blitzarcade: search'
     }
 }
 
