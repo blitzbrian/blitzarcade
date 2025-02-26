@@ -6,6 +6,7 @@ import {
     Text,
     Flex,
 } from "@mantine/core";
+import type { Metadata } from "next";
 import NextImage from "next/image";
 import Link from "next/link";
 import { parse } from "node-html-parser";
@@ -14,6 +15,29 @@ interface Game {
     image: string;
     name: string;
     path: string;
+}
+
+type Props = {
+    params: Promise<{ search: string }>
+}
+
+export async function generateMetadata( { params }: Props) {
+    const { search } = await params;
+
+    return {
+        title: `blitzarcade: ${decodeURI(search)}`,
+        openGraph: {
+            title: `blitzarcade: ${decodeURI(search)}`,
+            url: `https://blitzarcade.org/search/${search}`
+        }
+    }
+}
+
+export const metadata: Metadata = {
+    title: 'blitzarcade: search',
+    openGraph: {
+        title: 'blitzarcade: search'
+    }
 }
 
 export const dynamic = 'force-static';

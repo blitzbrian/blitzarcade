@@ -16,7 +16,7 @@ export default function App({ children, breadcrumbs, netplay }: { children: Reac
                 <Flex >
                     <Link style={{ textDecoration: "none", color: "white", width: "100px", display: "block" }} prefetch={false} href="/">
                         <Flex align="center" direction="row" h="100%">    
-                            <NextImage alt="logo" height={679 / 25 } width={759 / 25} src="/image/logo.png"></NextImage>
+                            <NextImage priority alt="logo" height={679 / 25 } width={759 / 25} src="/image/logo.png"></NextImage>
                             <Text ml="xs" fw={500} fz={15}>blitzarcade</Text>
                         </Flex>
                     </Link>

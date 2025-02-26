@@ -21,6 +21,7 @@ export default function Emulator({
         window.addEventListener("message", async (e) => {
             if (e.origin !== location.origin) return;
             if (e.data === "revalidate") {
+                console.log("Revalidating page!")
                 await revalidate(location.pathname);
                 setTimeout(() => {
                     router.refresh();

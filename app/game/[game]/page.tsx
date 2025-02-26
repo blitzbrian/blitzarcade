@@ -11,31 +11,33 @@ interface Game {
     rating: number;
 }
 
-// // Store the cache for a day
-// export const revalidate = 86400 * 7;
-
-// export const dynamicParams = false;
-
-//   export async function generateStaticParams() {
-//     let params = [];
-//     const platforms = ["nintendo-ds", "gameboy-advance"];
-
-//     for (const platform of platforms) {
-//       const res = await fetch(`https://www.romsgames.net/roms/${platform}/`);
-//       const html = await res.text();
-//       const pages =
-//         html.split(
-//           "flex items-center justify-center px-5 h-12 mx-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-950"
-//         ).length - 1;
-//       for (let i = 1; i <= pages; i++) {
-//         params.push({ platform, page: i.toString() });
-//       }
-//     }
-//     return params;
-//   }
-
 export const dynamic = "force-static";
 export const fetchCache = "force-cache";
+
+type Props = {
+    params: Promise<{ game: string }>
+}
+
+export async function generateMetadata( { params }: Props) {
+    const { game } = await params;
+
+    const res = await fetch(`https://www.romsgames.net/${game}/`, {
+        cache: "force-cache",
+    });
+    const html = await res.text();
+    const root = parse(html);
+    const json = JSON.parse(
+        root.querySelector('[type="application/ld+json"]')?.innerText || "{}"
+    );
+
+    return {
+        title: `blitzarcade: ${json.name}`,
+        openGraph: {
+            title: `blitzarcade: ${json.name}`,
+            url: `https://blitzarcade.org/game/${game}`
+        }
+    }
+}
 
 export default async function Game({
     params,

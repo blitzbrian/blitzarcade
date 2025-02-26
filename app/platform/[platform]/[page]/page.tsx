@@ -15,6 +15,23 @@ interface Game {
 export const dynamic = 'force-static';
 export const fetchCache = 'force-cache';
 
+type Props = {
+    params: Promise<{ platform: string, page: string }>
+}
+
+export async function generateMetadata( { params }: Props) {
+    const { platform, page } = await params;
+
+    const platformName = platforms.find(path => path.path === platform)?.name || "Unknown Console"
+
+    return {
+        title: `blitzarcade: ${platformName}`,
+        openGraph: {
+            title: `blitzarcade: ${platformName}`,
+            url: `https://blitzarcade.org/platform/${platform}/${page}`
+        }
+    }
+}
 
 export async function generateStaticParams() {
     const params = [];
