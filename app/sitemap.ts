@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             ).length - 1 || 1;
 
         for (let i = 1; i <= p; i++) {
-            pages.push({ url: `${baseUrl}/${platform.path}/${i}`, lastModified: new Date(), priority: 0.5, changeFrequency: 'daily' });
+            pages.push({ url: `${baseUrl}/platform/${platform.path}/${i}`, lastModified: new Date(), priority: 0.5, changeFrequency: 'daily' });
         }
     }
 
